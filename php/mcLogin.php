@@ -95,12 +95,73 @@ function checkLogin($username, $password=NULL) {
     return NULL;
 }
 
-function createUser() {
+/*
+This function will create a user in the database with the given username and
+password. If no password if given, the user will not be assigned a password,
+NULL will be used.
 
+@param  username    Username of the user to be created.
+@param  password    [Optional] Password of the user to be created. NULL will be
+                    used if no value given.
+
+@return Username of the newly created user if successful, NULL if fails.
+*/
+function createUser($username, $password=NULL) {
+    global $link, $table, $WRITE;
+
+    if(!db_connect($WRITE)) {
+        return NULL;
+    }
+
+    $query = "INSERT INTO " . $table . "(username, password) VALUES('" . $username . "',";
+
+    if($password != NULL) {
+        $query = $query . "'" . $password . "')";
+    } else {
+        $query = $query . "NULL)";
+    }
+
+    if ($result = $link->query($query)) {
+        db_close();
+        return $username;
+    } else {
+        echo 'Create user query failed.';
+    }
+
+    db_close();
+    return NULL;
 }
 
-function deleteUser() {
+/*
+Delete user with the given username.
 
+@param  username    Username of the user to be deleted.
+
+@return Username of deleted user on success, NULL on db connect or query fail,
+        0 if user does not exist.
+*/
+function deleteUser($username) {
+    global $link, $table, $WRITE;
+    
+    if(checkLogin($username) == NULL) {
+        return 0;
+    }
+
+    if(!db_connect($WRITE)) {
+        return NULL;
+    }
+
+    $query = "DELETE FROM " . $table . " WHERE username='" . $username . "'";
+
+    if ($result = $link->query($query)) {
+        db_close();
+        return $username;
+    } else {
+        echo 'Delete user query failed.';
+    }
+
+    db_close();
+    return NULL;
 }
 
 function disableUser() {
