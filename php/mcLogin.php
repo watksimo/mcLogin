@@ -8,6 +8,28 @@ $curr_pass = NULL;
 $READ = 0;
 $WRITE = 1;
 
+if(isset($_POST['func']) && !empty($_POST['func'])) {
+    $func = $_POST['func'];
+    main($func);
+}
+
+/*
+Function to be called when the script is executed by an AJAX call with the
+'func' variable set, defining the function to be executed.
+
+@param  func    Name of the function to be executed by the AJAX call.
+*/
+function main($func) {
+    switch($action) {
+        case 'checkLogin':
+            echo 'Execute checkLogin not implemented!';
+            break;
+        case 'setSessVar':
+            echo 'Execute setSessVar not implemented!';
+            break;
+    }
+}
+
 /*
 Connect to database as specified user with details in the variables file.
 
